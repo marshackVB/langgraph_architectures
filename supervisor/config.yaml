@@ -1,0 +1,37 @@
+agents:
+  supervisor:
+    - llm: databricks-claude-3-7-sonnet
+      llm_parameters:
+        max_tokens: 1500
+        temperature: 0
+  genie:
+    - llm: databricks-claude-3-7-sonnet
+      space_id: 01f03cadc7e7185793313ce6b8c8e755
+      name: Genie
+      description: "This agent can answer questions about supply chain data"
+  rag:
+    - llm: databricks-claude-3-7-sonnet
+      llm_parameters:
+        max_tokens: 1500
+        temperature: 0
+      embedding_model: databricks-gte-large-en
+      endpoint_name: one-env-shared-endpoint-0
+      index_location: shared.mlc_schema.databricks_pdf_documentation_self_managed_vs_index
+      retrieval_parameters:
+        k: 3
+        query_type: ann
+      retrieval_schema:
+        chunk_text: content
+        document_uri: url
+        primary_key: id
+mlflow:
+  experiment_location: /Users/marshall.carter@databricks.com/langgraph_models
+  uc_model: main.default.langgraph_example_agent
+  input_example:
+    messages:
+      - content: What is Apache Spark
+        role: user
+      #- content: Apache spark is a distributed, OSS in-memory computation engine.
+      #  role: assistant
+      #- content: Does it support streaming?
+      #  role: user
