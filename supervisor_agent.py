@@ -10,9 +10,32 @@ from mlflow.types.agent import (
 from databricks_langchain import ChatDatabricks
 from langchain_core.messages import convert_to_openai_messages
 from langgraph_supervisor import create_supervisor
+from langgraph.prebuilt import ToolNode
 
-from agents.rag.graph import rag_agent
-from agents.genie.graph import genie_agent
+from agents.genie.graph import compile_genie_agent
+from agents.genie.resources.model import model as genie_model
+from agents.genie.tools import text_to_sql_tool
+
+from agents.rag.graph import compile_rag_agent
+from agents.rag.resources.model import model as rag_model
+from agents.rag.tools import documentation_search_tool
+
+
+# CONFIGURE SUB AGENTS
+# Genie
+genie_tools = [text_to_sql_tool]
+genie_model_with_tools = genie_model.bind_tools(genie_tools, tool_choice="auto")
+genie_tool_node = ToolNode(tools=genie_tools)
+
+genie_agent = compile_genie_agent(genie_model_with_tools, 
+                                  genie_tool_node)
+# Rag
+rag_tools = [documentation_search_tool]
+rag_model_with_tools = rag_model.bind_tools(rag_tools, tool_choice="auto")
+rag_tool_node = ToolNode(tools=rag_tools)
+
+rag_agent = compile_rag_agent(rag_model_with_tools, 
+                              rag_tool_node)
 
 
 # CONFIGURE THE SUPERVISOR
