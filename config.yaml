@@ -1,16 +1,16 @@
 agents:
   supervisor:
-    - llm: databricks-claude-3-7-sonnet
+    - llm: databricks-claude-sonnet-4
       llm_parameters:
         max_tokens: 1500
         temperature: 0
   genie:
-    - llm: databricks-claude-3-7-sonnet
+    - llm: databricks-claude-sonnet-4
       space_id: 01f03cadc7e7185793313ce6b8c8e755
       name: Genie
       description: "This agent can answer questions about supply chain data"
   rag:
-    - llm: databricks-claude-3-7-sonnet
+    - llm: databricks-claude-sonnet-4
       llm_parameters:
         max_tokens: 1500
         temperature: 0
